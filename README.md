@@ -1,57 +1,29 @@
-# CampusCompute
+# CampusCompute: Intelligent Job Scheduling and Resource Management
 
-A command-line prototype for the OS mini-project. It simulates job scheduling,
-concurrent activity logging, inter-process communication, the Banker's safety
-algorithm, worker-failure detection, and process resource limits, written in C
-on Linux.
+**Operating Systems (UE25CS242A) - Level 3 Mini Project**
+
+## Team Members
+- Aditi Saraf (PES1UG25CS031): producer-consumer logger, shared-memory IPC, worker/process management (fork/waitpid)
+- Deeksha A (PES1UG26CS813): CPU scheduling (FCFS, RR, Priority), Banker's safety algorithm, resource limits, job management
 
 ## Requirements
-- Ubuntu Linux or WSL Ubuntu
-- GCC and Make (`sudo apt install build-essential`)
+Ubuntu Linux or WSL Ubuntu; GCC and Make (`sudo apt install build-essential`).
 
 ## Build
-```
-make clean && make
-```
-This produces the `campuscompute` executable.
+`make clean && make`
 
-## Running it
-Start the interactive menu:
-```
-./campuscompute
-```
-Or run a single feature directly:
-```
-./campuscompute fcfs
-./campuscompute rr
-./campuscompute priority
-./campuscompute compare
-./campuscompute banker-safe
-./campuscompute banker-unsafe
-./campuscompute logger
-./campuscompute ipc
-./campuscompute worker
-./campuscompute limits
-./campuscompute all      # runs everything in sequence
-./campuscompute help     # lists all commands
-```
-From the menu you can add your own jobs (ID, arrival, burst, priority), set the
-Round Robin quantum, and show job status.
+## Run
+`./campuscompute` for the interactive menu.
+`./campuscompute help` for all command options.
+`./campuscompute all` for an integrated demonstration.
+Individual tests: `./campuscompute fcfs`, `rr`, `priority`, `compare`, `banker-safe`, `banker-unsafe`, `logger`, `ipc`, `worker`, `limits`.
 
-## Notes on behaviour
-- Scheduling is a deterministic simulation. A job is marked completed once a
-  scheduling run finishes; the program does not execute real user workloads.
-- Priority scheduling treats smaller numbers as higher priority. Ties go to
-  earlier arrival, then smaller job ID. The logic is in `scheduler.c`.
-- Worker failure is simulated on purpose (the child exits with status 7), so it
-  is not a real crash.
-- The resource-limit demo applies RLIMIT_NOFILE inside a child process and shows
-  `open()` failing once the limit is reached.
+The menu allows custom jobs (ID, arrival, burst, priority), a configurable positive RR quantum, and job status display. Scheduling is a deterministic simulation; statuses become completed when a scheduling demonstration finishes. It does not run user-submitted CPU workloads.
+
+Priority uses smaller numbers as higher priority. FCFS ties use job ID. The scheduler's tie-break behaviour is in `scheduler.c`.
 
 ## Cleanup
-- `make clean` removes the object files and the executable.
-- The logger writes `logs/activity.log`. Remove it with `rm -f logs/activity.log`
-  if you want.
-- The IPC demo unlinks its own shared memory and named semaphore, the process
-  demos reap their children, and the logger joins its threads, so nothing is left
-  behind.
+`make clean` removes compiled objects and the executable. The logger writes `logs/activity.log`; remove this file manually if desired (`rm -f logs/activity.log`). IPC demos unlink their own shared memory and named semaphores. The process demos reap child processes and the logger joins threads.
+
+## Notes
+The Banker examples demonstrate safe and unsafe states. Worker failure is explicitly simulated (exit code 7). The resource-limit demo demonstrates RLIMIT_NOFILE in a child process.
